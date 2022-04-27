@@ -1,8 +1,11 @@
 import React from 'react'
 import { View, StyleSheet, Image } from 'react-native';
-import { Text, Button, VStack } from '@react-native-material/core';
+import { 
+  Text, Button, 
+  VStack, 
+} from '@react-native-material/core';
 
-const LandingScreen = () => {
+const LandingScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
       <View style={styles.logoView}>
@@ -14,13 +17,13 @@ const LandingScreen = () => {
         <Text variant="h4" color='#593739' style={styles.headText}>Recruitment</Text>
         <Text variant="h4" color='#593739' style={styles.headText}>Portal.</Text>
       </VStack>
-      
       <Button 
         variant="contained" 
         title="Get Started" 
         color="#593739" 
         style={{marginTop: 40, height: 40, justifyContent: 'center'}} 
         uppercase={false}
+        onPress={() => navigation.navigate('Login')}
       />
     </View>
   )
