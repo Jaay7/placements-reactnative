@@ -1,9 +1,60 @@
 import React from 'react'
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LandingScreen from './Screens/LandingScreen';
+import LoginScreen from './Screens/auths/LoginScreen';
+import Dashboard from './Screens/dashboard';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const Stack = createNativeStackNavigator();
 
 const Main = () => {
+
+  const [isSignedIn, setSignedIn] = React.useState(false);
+
+  React.useEffect(() => {
+    async function checkLogin() {
+      const token = await AsyncStorage.getItem('token');
+      if(token) {
+        setSignedIn(true);
+      } else {
+        setSignedIn(false);
+      }
+    }
+    checkLogin();
+  }, []);
+
   return (
-    <LandingScreen />
+    <NavigationContainer>
+      <Stack.Navigator>
+        {isSignedIn ? (
+          <Stack.Screen
+            name="Dashboard"
+            component={Dashboard}
+            options={{
+              headerShown: false
+            }}
+          />
+        ) : (
+          <>
+            <Stack.Screen 
+              name="Landing"
+              component={LandingScreen}
+              options={{
+                headerShown: false
+              }}
+            />
+            <Stack.Screen 
+              name="Login"
+              component={LoginScreen}
+              options={{
+                headerShown: false
+              }}
+            />
+          </>
+        )}
+      </Stack.Navigator>
+    </NavigationContainer>
   )
 }
 
