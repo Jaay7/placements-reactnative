@@ -15,6 +15,7 @@ const Dashboard = () => {
       activeColor="#ffcfbc"
       inactiveColor="#a1a1a1"
       labeled={false}
+      keyboardHidesNavigationBar
       barStyle={{ 
         height: Platform.OS === 'ios' ? 70 : 65,
         backgroundColor: '#182224',
