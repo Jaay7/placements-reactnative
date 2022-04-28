@@ -64,6 +64,7 @@ const LoginScreen = ({navigation}) => {
         color="#2e1113"
         onChangeText={(text) => setUsername(text)}
         style={{marginBottom: 10}}
+        autoCapitalize="none"
       />
       <TextInput
         label="Password"
@@ -73,6 +74,7 @@ const LoginScreen = ({navigation}) => {
         onChangeText={(text) => setPassword(text)}
         style={{marginBottom: 10}}
         secureTextEntry={true}
+        autoCapitalize="none"
       />
       <Text variant="body2" color='#2e1113' style={{alignSelf: 'flex-end'}}>Forgot Password?</Text>
       <Button
