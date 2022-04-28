@@ -12,13 +12,15 @@ const Dashboard = () => {
   return(
     <Tab.Navigator
       initialRouteName="Home"
-      activeColor="#ffcfbc"
+      // activeColor="#ffcfbc"
+      activeColor="#b86f5f"
       inactiveColor="#a1a1a1"
       labeled={false}
       keyboardHidesNavigationBar
       barStyle={{ 
         height: Platform.OS === 'ios' ? 70 : 65,
-        backgroundColor: '#182224',
+        // backgroundColor: '#182224',
+        backgroundColor: '#f2f2f2',
         borderRadius: 20,
         width: Dimensions.get('window').width - 30,
         maxWidth: 380,
