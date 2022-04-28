@@ -48,7 +48,7 @@ const get_all_jobs = gql`
   }
 `;
 
-const HomeScreen = () => {
+const HomeScreen = ({navigation}) => {
   const [search, setSearch] = React.useState('');
   const [token, setToken] = React.useState('');
 
@@ -92,7 +92,7 @@ const HomeScreen = () => {
               <MaterialIcons name="search" size={24} color="gray" />
             }
           />
-          <GetJobs />
+          <GetJobs navigation={navigation} />
         </View>
       )}
     </View>
@@ -101,7 +101,7 @@ const HomeScreen = () => {
 
 export default HomeScreen
 
-const GetJobs = () => {
+const GetJobs = ({navigation}) => {
   const { data, loading, error } = useQuery(get_all_jobs);
 
   return (
@@ -109,11 +109,11 @@ const GetJobs = () => {
     error ? <Text>Oops! Something went wrong.</Text> :
     <View>
       {data.jobs.map(job => (
-        <Surface elevation={2} style={styles.card} key={job.id}>
+        <Surface elevation={1} style={styles.card} key={job.id}>
           <HStack justify="space-between" items="center" ph={8}>
             <VStack>
-              <Text style={styles.cpname}>{job.companyName}</Text>
-              <Text style={styles.jbtitle}>{job.jobTitle}</Text>
+              <Text variant="body1" style={styles.cpname}>{job.companyName}</Text>
+              <Text variant="body1" style={styles.jbtitle}>{job.jobTitle}</Text>
             </VStack>
             <View style={styles.imgLogo}>
               <Image source={{uri: job.companyLogo}} style={{height: 30, width: 30}} />
@@ -121,9 +121,16 @@ const GetJobs = () => {
           </HStack>
           <HStack items="center" wrap='wrap' style={{marginTop: 10}}>
             <MaterialIcons name="place" size={24} color="black" />
-            <Text style={styles.location}>+{job.jobLocation.split('|').length}</Text>
+            <Text variant="subtitle2" style={styles.location}>+{job.jobLocation.split('|').length}</Text>
             {job.jobLocation.split('|').sort().slice(0, 3).map((item, index) => {
-              return <Chip label={item} variant="outlined" key={index}  style={{marginTop: 5, marginLeft: 5}} />
+              return <Chip 
+                label={item} 
+                labelStyle={{ fontSize: 12 }} 
+                // variant="outlined" 
+                contentContainerStyle={{ margin: 0, backgroundColor: '#eea85230' }}
+                key={index} 
+                style={{marginTop: 5, marginLeft: 5}}
+              />
             })}
           </HStack>
           <HStack justify="space-between" items="center" ph={8} style={{marginTop: 6}}>
@@ -134,6 +141,7 @@ const GetJobs = () => {
               variant="contained"
               color="#b86f5f"
               tintColor='#fff'
+              onPress={() => navigation.navigate('ViewJob', {job: job.id})}
             />
           </HStack>
         </Surface>
