@@ -6,6 +6,7 @@ import LoginScreen from './Screens/auths/LoginScreen';
 import Dashboard from './Screens/dashboard';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ViewJobScreen from './Screens/ViewJobScreen';
+import SettingsScreen from './Screens/SettingsScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -40,6 +41,13 @@ const Main = () => {
             <Stack.Screen
               name="ViewJob"
               component={ViewJobScreen}
+              options={{
+                headerShown: false
+              }}
+            />
+            <Stack.Screen
+              name="Settings"
+              component={SettingsScreen}
               options={{
                 headerShown: false
               }}
