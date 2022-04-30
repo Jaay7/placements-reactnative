@@ -1,9 +1,9 @@
 import React from 'react'
 import { StatusBar, StyleSheet, View, ScrollView, Image } from 'react-native'
-import { Text, Button, ActivityIndicator, Surface, HStack } from '@react-native-material/core'
+import { Text, Button, ActivityIndicator, Surface, HStack, ListItem, Switch, Divider } from '@react-native-material/core'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useQuery, gql } from "@apollo/client";
-import { Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { Ionicons, MaterialIcons, Feather } from '@expo/vector-icons';
 
 const get_user_data = gql`
   query {
@@ -16,8 +16,21 @@ const get_user_data = gql`
   }
 `;
 
-const ProfileScreen = () => {
+const ProfileScreen = ({navigation}) => {
   const [token, setToken] = React.useState('');
+  const [darkTheme, setDarkTheme] = React.useState(false);
+
+  React.useEffect(() => {
+    const getTheme = async() => {
+      const theme = await AsyncStorage.getItem('theme');
+      if(theme === 'dark') {
+        setDarkTheme(true);
+      } else {
+        setDarkTheme(false);
+      }
+    }
+    getTheme();
+  }, [darkTheme]);
 
   React.useEffect(() => {
     const getToken = async () => {
@@ -36,7 +49,8 @@ const ProfileScreen = () => {
   });
 
   return (
-    <View style={styles.container}>
+    <View style={darkTheme ? styles.darkContainer : styles.container}>
+      {/* <StatusBar backgroundColor="#876163" barStyle='light-content' /> */}
       {loading ? (
         <ActivityIndicator />
       ) :
@@ -44,7 +58,7 @@ const ProfileScreen = () => {
         <Text>Error! {error.message}</Text>
       ) : (
         <ScrollView style={{flex: 1}}>
-          <View style={styles.box}>
+          <View style={{height: 110, backgroundColor: darkTheme ? '#121212' : '#876163'}}>
             <Text variant="body1" color="white" style={{ fontSize: 18, fontWeight: 'bold', paddingVertical: 8, alignSelf: 'center'}}>Profile</Text>
             <Image
               source={{uri: 'https://picsum.photos/200'}}
@@ -52,53 +66,42 @@ const ProfileScreen = () => {
               
             />
           </View>
-          <Surface elevation={3} style={[styles.card, {marginTop: 70}]}>
+          <Surface elevation={3} style={[styles.card, {marginTop: 70, backgroundColor: darkTheme ? '#242424' : '#fff'}]}>
             <HStack justify="space-between" items="center">
-              <Text variant="h6" style={{fontSize: 18, fontWeight: 'bold'}}>Basic Info</Text>
+              <Text variant="h6" color={darkTheme ? '#f2f2f2' : '#000'} style={{fontSize: 18, fontWeight: 'bold'}}>Basic Info</Text>
               <Button 
                 title="Edit"
                 variant="text"
-                color="#593739"
-                leading={<MaterialIcons name="edit" size={18} color="#593739" />}
+                color={darkTheme ? '#ffcfbc' : '#593739'}
+                leading={<MaterialIcons name="edit" size={18} color={darkTheme ? '#ffcfbc' : '#593739'} />}
               />
             </HStack>
             <Text variant="body2" color="#b86f5f" style={{marginTop: 8}}>Username</Text>
-            <Text>{data.me.username}</Text>
+            <Text color={darkTheme ? '#f2f2f2' : '#000'}>{data.me.username}</Text>
             <Text variant="body2" color="#b86f5f" style={{marginTop: 8}}>Email</Text>
-            <Text>{data.me.email}</Text>
+            <Text color={darkTheme ? '#f2f2f2' : '#000'}>{data.me.email}</Text>
             <Text variant="body2" color="#b86f5f" style={{marginTop: 8}}>Full Name</Text>
-            <Text>{data.me.fullName}</Text>
+            <Text color={darkTheme ? '#f2f2f2' : '#000'}>{data.me.fullName}</Text>
           </Surface>
-          <Surface elevation={3} style={styles.card}>
-            <HStack justify="space-between" items="center">
-              <Text variant="body1">Student Details</Text>
-              <Ionicons name="ios-arrow-forward" size={18} color="#593739" />
-            </HStack>
-          </Surface>
-          <Surface elevation={3} style={styles.card}>
-            <HStack justify="space-between" items="center">
-              <Text variant="body1">Applied Jobs</Text>
-              <Ionicons name="ios-arrow-forward" size={18} color="#593739" />
-            </HStack>
-          </Surface>
-          <Surface elevation={3} style={styles.card}>
-            <HStack justify="space-between" items="center">
-              <Text variant="body1">Saved Jobs</Text>
-              <Ionicons name="ios-arrow-forward" size={18} color="#593739" />
-            </HStack>
-          </Surface>
-          <Button 
-            title="Logout"
-            color="#b86f5f"
-            tintColor='#fff'
-            variant="contained"
-            titleStyle={{fontSize: 16}}
-            uppercase={false}
-            style={{marginHorizontal: 12, marginTop: 10}}
-            onPress={async() => {
-              await AsyncStorage.removeItem('token');
-            }}
-          />
+          <HStack justify="space-between" items="center" p={16}>
+            <Text color={darkTheme ? '#f2f2f2' : '#000'} variant="body1">Student Details</Text>
+            <Feather name="chevron-right" size={18} color={darkTheme ? '#ffcfbc' : '#593739'} />
+          </HStack>
+          <Divider color={darkTheme ? '#323232' : '#e2e2e2'} style={{marginHorizontal: 16}} />
+          <HStack justify="space-between" items="center" p={16}>
+            <Text color={darkTheme ? '#f2f2f2' : '#000'} variant="body1">Applied Jobs</Text>
+            <Feather name="chevron-right" size={18} color={darkTheme ? '#ffcfbc' : '#593739'} />
+          </HStack>
+          <Divider color={darkTheme ? '#323232' : '#e2e2e2'} style={{marginHorizontal: 16}} />
+          <HStack justify="space-between" items="center" p={16}>
+            <Text color={darkTheme ? '#f2f2f2' : '#000'} variant="body1">Saved Jobs</Text>
+            <Feather name="chevron-right" size={18} color={darkTheme ? '#ffcfbc' : '#593739'} />
+          </HStack>
+          <Divider color={darkTheme ? '#323232' : '#e2e2e2'} style={{marginHorizontal: 16}} />
+          <HStack justify="space-between" items="center" p={16}>
+            <Text color={darkTheme ? '#f2f2f2' : '#000'} variant="body1">Settings</Text>
+            <Feather name="chevron-right" size={18} color={darkTheme ? '#ffcfbc' : '#593739'} />
+          </HStack>
         </ScrollView>
       )}
     </View>
@@ -113,9 +116,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     marginTop: StatusBar.currentHeight
   },
-  box: {
-    height: 110,
-    backgroundColor: '#876163'
+  darkContainer: {
+    flex: 1,
+    backgroundColor: '#000',
+    marginTop: StatusBar.currentHeight
   },
   card: {
     paddingHorizontal: 16,
@@ -123,7 +127,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 12,
     marginVertical: 8,
     borderRadius: 10,
-    backgroundColor: '#fff'
   },
   image: {
     width: 100, 

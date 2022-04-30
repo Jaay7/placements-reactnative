@@ -51,6 +51,19 @@ const get_all_jobs = gql`
 const HomeScreen = ({navigation}) => {
   const [search, setSearch] = React.useState('');
   const [token, setToken] = React.useState('');
+  const [darkTheme, setDarkTheme] = React.useState(false);
+
+  React.useEffect(() => {
+    const getTheme = async() => {
+      const theme = await AsyncStorage.getItem('theme');
+      if(theme === 'dark') {
+        setDarkTheme(true);
+      } else {
+        setDarkTheme(false);
+      }
+    }
+    getTheme();
+  }, [darkTheme]);
 
   React.useEffect(() => {
     const getToken = async () => {
@@ -58,7 +71,7 @@ const HomeScreen = ({navigation}) => {
       setToken(token);
     }
     getToken();
-  }, []);
+  }, [token]);
   
   const { loading, error, data } = useQuery(get_user_data, {
     context: {
@@ -69,15 +82,16 @@ const HomeScreen = ({navigation}) => {
   });
 
   return (
-    <View style={styles.container}>
+    <View style={darkTheme ? styles.darkContainer : styles.container}>
+      <StatusBar backgroundColor={darkTheme ? "#000" : "#fff"} barStyle='dark-content' />
       {loading ? (
         <ActivityIndicator />
       ) :
       error ? (
-        <Text>Error! {error.message}</Text>
+        <Text color={darkTheme ? '#f2f2f2' : '#000'}>Error! {error.message}</Text>
       ) : (
         <View style={styles.box}>
-          <Text variant="h6">Welcome, {data.me.username}!</Text>
+          <Text variant="h6" color={darkTheme ? '#f2f2f2' : '#000'}>Welcome, {data.me.username}!</Text>
           <Text variant="subtitle2" color="gray" style={{marginTop: 5}}>Here goes the available companies which are arrived at our campus.</Text>
           <TextInput 
             style={styles.search}
@@ -85,6 +99,7 @@ const HomeScreen = ({navigation}) => {
             placeholder="Search"
             variant='standard'
             color='#b86f5f'
+            inputStyle={{color: darkTheme ? '#f2f2f2' : '#000'}}
             clearButtonMode='always'
             value={search}
             onChangeText={(text) => setSearch(text)}
@@ -92,7 +107,7 @@ const HomeScreen = ({navigation}) => {
               <MaterialIcons name="search" size={24} color="gray" />
             }
           />
-          <GetJobs navigation={navigation} />
+          <GetJobs navigation={navigation} darkTheme={darkTheme} />
         </View>
       )}
     </View>
@@ -101,7 +116,7 @@ const HomeScreen = ({navigation}) => {
 
 export default HomeScreen
 
-const GetJobs = ({navigation}) => {
+const GetJobs = ({navigation, darkTheme}) => {
   const { data, loading, error } = useQuery(get_all_jobs);
 
   return (
@@ -112,29 +127,29 @@ const GetJobs = ({navigation}) => {
         <Surface elevation={1} style={styles.card} key={job.id}>
           <HStack justify="space-between" items="center" ph={8}>
             <VStack>
-              <Text variant="body1" style={styles.cpname}>{job.companyName}</Text>
-              <Text variant="body1" style={styles.jbtitle}>{job.jobTitle}</Text>
+              <Text variant="body1" color={darkTheme ? '#f2f2f2' : '#000'} style={styles.cpname}>{job.companyName}</Text>
+              <Text variant="body1" color={darkTheme ? '#f2f2f2' : '#000'} style={styles.jbtitle}>{job.jobTitle}</Text>
             </VStack>
             <View style={styles.imgLogo}>
               <Image source={{uri: job.companyLogo}} style={{height: 30, width: 30}} />
             </View>
           </HStack>
           <HStack items="center" wrap='wrap' style={{marginTop: 10}}>
-            <MaterialIcons name="place" size={24} color="black" />
-            <Text variant="subtitle2" style={styles.location}>+{job.jobLocation.split('|').length}</Text>
+            <MaterialIcons name="place" size={24}  color={darkTheme ? '#f2f2f2' : '#000'} />
+            <Text variant="subtitle2" color={darkTheme ? '#f2f2f2' : '#000'} style={styles.location}>+{job.jobLocation.split('|').length}</Text>
             {job.jobLocation.split('|').sort().slice(0, 3).map((item, index) => {
               return <Chip 
                 label={item} 
-                labelStyle={{ fontSize: 12 }} 
-                // variant="outlined" 
-                contentContainerStyle={{ margin: 0, backgroundColor: '#eea85230' }}
+                labelStyle={{ fontSize: 12, color: darkTheme ? '#f2f2f2' : '#000' }} 
+                // variant={darkTheme ? "outlined" : "filled"} 
+                contentContainerStyle={{ margin: 0, backgroundColor: darkTheme ? '#614421' : '#eea85230' }}
                 key={index} 
                 style={{marginTop: 5, marginLeft: 5}}
               />
             })}
           </HStack>
           <HStack justify="space-between" items="center" ph={8} style={{marginTop: 6}}>
-            <MaterialIcons name="bookmark-border" size={24} color="black" />
+            <MaterialIcons name="bookmark-border" size={24} color={darkTheme ? '#f2f2f2' : '#000'} />
             <Button 
               title="View Job"
               uppercase={false}
@@ -154,6 +169,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    marginTop: StatusBar.currentHeight
+  },
+  darkContainer: {
+    flex: 1,
+    backgroundColor: '#000',
     marginTop: StatusBar.currentHeight
   },
   box: {

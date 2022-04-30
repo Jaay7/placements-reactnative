@@ -5,10 +5,25 @@ import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 import HomeScreen from './HomeScreen';
 import MyJobs from './MyJobs';
 import ProfileScreen from './ProfileScreen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Tab = createMaterialBottomTabNavigator();
 
 const Dashboard = () => {
+  const [darkTheme, setDarkTheme] = React.useState(false);
+
+  React.useEffect(() => {
+    const getTheme = async() => {
+      const theme = await AsyncStorage.getItem('theme');
+      if(theme === 'dark') {
+        setDarkTheme(true);
+      } else {
+        setDarkTheme(false);
+      }
+    }
+    getTheme();
+  }, [darkTheme])
+
   return(
     <Tab.Navigator
       initialRouteName="Home"
@@ -20,7 +35,7 @@ const Dashboard = () => {
       barStyle={{ 
         height: Platform.OS === 'ios' ? 70 : 65,
         // backgroundColor: '#182224',
-        backgroundColor: '#f2f2f2',
+        backgroundColor: darkTheme ? '#182224' : '#f2f2f2',
         borderRadius: 20,
         width: Dimensions.get('window').width - 30,
         maxWidth: 380,

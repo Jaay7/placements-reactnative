@@ -47,6 +47,7 @@ const ViewJobScreen = ({navigation, route}) => {
       loading ? <ActivityIndicator /> :
       error ? <Text>Oops! Something went wrong.</Text> :
       <>
+        <StatusBar backgroundColor="#593739" barStyle='light-content' />
         <AppBar 
           title={data.job.companyName}
           color='#593739'
