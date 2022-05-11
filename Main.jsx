@@ -41,9 +41,10 @@ const Main = () => {
             <Stack.Screen
               name="ViewJob"
               component={ViewJobScreen}
-              options={{
-                headerShown: false
-              }}
+              options={({route}) => ({
+                title: route.params.name,
+                headerShown: Platform.OS === 'ios' ? true : false
+              })}
             />
             <Stack.Screen
               name="Settings"
