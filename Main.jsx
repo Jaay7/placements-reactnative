@@ -50,7 +50,7 @@ const Main = () => {
               name="Settings"
               component={SettingsScreen}
               options={{
-                headerShown: false
+                headerShown: Platform.OS === 'ios' ? true : false
               }}
             />
           </>
