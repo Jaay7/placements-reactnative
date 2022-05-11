@@ -4,6 +4,7 @@ import { Text, Button, ActivityIndicator, Surface, HStack, ListItem, Switch, Div
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useQuery, gql } from "@apollo/client";
 import { Ionicons, MaterialIcons, Feather } from '@expo/vector-icons';
+import { useIsFocused } from '@react-navigation/native';
 
 const get_user_data = gql`
   query {
@@ -19,6 +20,7 @@ const get_user_data = gql`
 const ProfileScreen = ({navigation}) => {
   const [token, setToken] = React.useState('');
   const [darkTheme, setDarkTheme] = React.useState(false);
+  const isFocused = useIsFocused();
 
   React.useEffect(() => {
     const getTheme = async() => {
@@ -29,16 +31,20 @@ const ProfileScreen = ({navigation}) => {
         setDarkTheme(false);
       }
     }
-    getTheme();
-  }, [darkTheme]);
+    if(isFocused) {
+      getTheme();
+    }
+  }, [darkTheme, isFocused]);
 
   React.useEffect(() => {
     const getToken = async () => {
       const token = await AsyncStorage.getItem('token');
       setToken(token);
     }
-    getToken();
-  }, []);
+    if(isFocused) {
+      getToken();
+    }
+  }, [token, isFocused]);
   
   const { loading, error, data } = useQuery(get_user_data, {
     context: {

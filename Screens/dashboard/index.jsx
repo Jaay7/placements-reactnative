@@ -7,12 +7,14 @@ import MyJobs from './MyJobs';
 import ProfileScreen from './ProfileScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useIsFocused } from '@react-navigation/native';
 
 const Tab = createMaterialBottomTabNavigator();
 const IOSTab = createBottomTabNavigator();
 
 const Dashboard = () => {
   const [darkTheme, setDarkTheme] = React.useState(false);
+  const isFocused = useIsFocused();
 
   React.useEffect(() => {
     const getTheme = async() => {
@@ -23,8 +25,10 @@ const Dashboard = () => {
         setDarkTheme(false);
       }
     }
-    getTheme();
-  }, [darkTheme])
+    if(isFocused) {
+      getTheme();
+    }
+  }, [darkTheme, isFocused])
 
   return(
   Platform.OS === 'ios' ? 

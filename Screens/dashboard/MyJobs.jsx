@@ -2,9 +2,11 @@ import React from 'react'
 import { Text } from '@react-native-material/core'
 import { StatusBar, StyleSheet, View, Platform } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from '@react-navigation/native';
 
 const MyJobs = () => {
   const [darkTheme, setDarkTheme] = React.useState(false);
+  const isFocused = useIsFocused();
 
   React.useEffect(() => {
     const getTheme = async() => {
@@ -15,8 +17,10 @@ const MyJobs = () => {
         setDarkTheme(false);
       }
     }
-    getTheme();
-  }, [darkTheme]);
+    if(isFocused) {
+      getTheme();
+    }
+  }, [darkTheme, isFocused]);
 
   return (
     <View style={darkTheme ? styles.darkContainer : styles.container}>

@@ -4,6 +4,7 @@ import { View, StyleSheet, StatusBar, Image, Platform } from 'react-native';
 import { useQuery, gql } from "@apollo/client";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MaterialIcons } from '@expo/vector-icons';
+import { useIsFocused } from '@react-navigation/native';
 
 const get_user_data = gql`
   query {
@@ -52,6 +53,7 @@ const HomeScreen = ({navigation}) => {
   const [search, setSearch] = React.useState('');
   const [token, setToken] = React.useState('');
   const [darkTheme, setDarkTheme] = React.useState(false);
+  const isFocused = useIsFocused();
 
   React.useEffect(() => {
     const getTheme = async() => {
@@ -62,23 +64,28 @@ const HomeScreen = ({navigation}) => {
         setDarkTheme(false);
       }
     }
-    getTheme();
-  }, [darkTheme]);
+    if(isFocused) {
+      getTheme();
+    }
+  }, [darkTheme, isFocused]);
 
   React.useEffect(() => {
     const getToken = async () => {
       const token = await AsyncStorage.getItem('token');
       setToken(token);
     }
-    getToken();
-  }, [token]);
+    if(isFocused) {
+      getToken();
+    }
+  }, [token, isFocused]);
   
   const { loading, error, data } = useQuery(get_user_data, {
     context: {
       headers: {
         authorization: 'JWT ' + token
       }
-    }
+    },
+    pollInterval: 1000
   });
 
   return (
