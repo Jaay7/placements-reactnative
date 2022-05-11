@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, View, StatusBar, Platform } from 'react-native';
-import { Text, Button, Switch, ListItem, AppBar } from '@react-native-material/core';
+import { Text, Button, Switch, ListItem, AppBar, HStack } from '@react-native-material/core';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -34,7 +34,7 @@ const SettingsScreen = ({navigation}) => {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={checked ? styles.darkContainer : styles.container}>
       <StatusBar backgroundColor="#593739" barStyle='light-content' />
       {Platform.OS !== 'ios' && <AppBar 
         title="Settings"
@@ -43,18 +43,15 @@ const SettingsScreen = ({navigation}) => {
           <Ionicons name="arrow-back-outline" size={24} color="white" onPress={() => navigation.goBack()} />
         }
       />}
-      <ListItem
-        title="Dark Theme"
-        bottomDivider={false}
-        trailing={
-          <Switch
-            value={checked}
-            onValueChange={toggleSwitch}
-            thumbColor={checked ? '#ed9e8c' : '#e2e2e2'}
-            trackColor={{ false: '#c2c2c2', true: '#ffcfbc' }}
-          />
-        }
-      />
+      <HStack justify="space-between" items="center" p={10}>
+        <Text color={checked ? '#f2f2f2' : '#000'} variant="body1">Dark Theme</Text>
+        <Switch
+          value={checked}
+          onValueChange={toggleSwitch}
+          thumbColor={checked ? '#ed9e8c' : '#e2e2e2'}
+          trackColor={{ false: '#c2c2c2', true: '#ffcfbc' }}
+        />
+      </HStack>
       <Text>{theme}</Text>
       <Button 
         title="Logout"
@@ -78,6 +75,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    marginTop: StatusBar.currentHeight
+  },
+  darkContainer: {
+    flex: 1,
+    backgroundColor: '#000',
     marginTop: StatusBar.currentHeight
   },
 })
