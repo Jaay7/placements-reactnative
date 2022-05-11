@@ -158,7 +158,7 @@ const GetJobs = ({navigation, darkTheme}) => {
               variant="contained"
               color="#b86f5f"
               tintColor='#fff'
-              onPress={() => navigation.navigate('ViewJob', {job: job.id})}
+              onPress={() => navigation.navigate('ViewJob', {job: job.id, name: job.companyName})}
             />
           </HStack>
         </Surface>
@@ -181,6 +181,7 @@ const styles = StyleSheet.create({
   box: {
     flex: 1,
     padding: 20,
+    marginTop: Platform.OS === 'ios' ? 40 : 0
   },
   imgLogo: {
     width: 100,
