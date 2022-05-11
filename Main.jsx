@@ -7,23 +7,53 @@ import Dashboard from './Screens/dashboard';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ViewJobScreen from './Screens/ViewJobScreen';
 import SettingsScreen from './Screens/SettingsScreen';
+import { useQuery, gql } from '@apollo/client';
+
+const get_user_data = gql`
+  query Me {
+    me {
+      id
+      username
+      email
+      fullName
+    }
+  }
+`;
 
 const Stack = createNativeStackNavigator();
 
 const Main = () => {
-
+  const [token, setToken] = React.useState('');
   const [isSignedIn, setSignedIn] = React.useState(false);
 
   React.useEffect(() => {
     async function checkLogin() {
       const token = await AsyncStorage.getItem('token');
       if(token) {
+        setToken(token);
         setSignedIn(true);
       } else {
         setSignedIn(false);
       }
     }
     checkLogin();
+  }, [token]);
+
+  const {data, loading, error} = useQuery(get_user_data, {
+    context: {
+      headers: {
+        authorization: 'JWT ' + token
+      }
+    },
+    pollInterval: 1000,
+    fetchPolicy: 'network-only',
+    onCompleted: (data) => {
+      if(data.me) {
+        setSignedIn(true);
+      } else {
+        setSignedIn(false);
+      }
+    }
   });
 
   return (
