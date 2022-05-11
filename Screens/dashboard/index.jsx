@@ -6,8 +6,10 @@ import HomeScreen from './HomeScreen';
 import MyJobs from './MyJobs';
 import ProfileScreen from './ProfileScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 const Tab = createMaterialBottomTabNavigator();
+const IOSTab = createBottomTabNavigator();
 
 const Dashboard = () => {
   const [darkTheme, setDarkTheme] = React.useState(false);
@@ -25,6 +27,53 @@ const Dashboard = () => {
   }, [darkTheme])
 
   return(
+  Platform.OS === 'ios' ? 
+    <IOSTab.Navigator
+      initialRouteName="Home"
+      screenOptions={{
+        tabBarActiveTintColor: '#b86f5f',
+        tabBarShowLabel: false,
+        tabBarStyle: {
+          backgroundColor: darkTheme ? '#000' : '#fff'
+        }
+      }}
+      tabBarShowLabel={false}
+      keyboardHidesNavigationBar
+    >
+      <IOSTab.Screen 
+      name="Home" 
+      component={HomeScreen} 
+      options={{
+        headerShown: false,
+        tabBarLabel: 'Home',
+        tabBarIcon: ({ color }) => (
+          <AntDesign name="home" color={color} size={22} />
+        ),
+      }}
+      />
+      <IOSTab.Screen 
+        name="MyJobs" 
+        component={MyJobs} 
+        options={{
+          headerShown: false,
+          tabBarLabel: 'Jobs',
+          tabBarIcon: ({ color }) => (
+            <MaterialIcons name="work" color={color} size={22} />
+          ),
+        }}
+      />
+      <IOSTab.Screen 
+        name="Profile" 
+        component={ProfileScreen} 
+        options={{
+          headerShown: false,
+          tabBarLabel: 'Profile',
+          tabBarIcon: ({ color }) => (
+            <AntDesign name="user" color={color} size={22} />
+          ),
+        }}
+      />
+    </IOSTab.Navigator> :
     <Tab.Navigator
       initialRouteName="Home"
       // activeColor="#ffcfbc"
