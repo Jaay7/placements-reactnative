@@ -1,5 +1,5 @@
 import React from 'react'
-import { StatusBar, StyleSheet, View, ScrollView, Image } from 'react-native'
+import { StatusBar, StyleSheet, View, ScrollView, Image, Platform } from 'react-native'
 import { Text, Button, ActivityIndicator, Surface, HStack, ListItem, Switch, Divider, Pressable } from '@react-native-material/core'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useQuery, gql } from "@apollo/client";
@@ -55,7 +55,9 @@ const ProfileScreen = ({navigation}) => {
         <ActivityIndicator />
       ) :
       error ? (
-        <Text>Error! {error.message}</Text>
+        <View style={{flex: 1}}>
+          <Text color={darkTheme ? '#f2f2f2' : '#000'} style={{marginTop: Platform.OS === 'ios' ? 60 : 10}}>Error! {error.message}</Text>
+        </View>
       ) : (
         <ScrollView style={{flex: 1}}>
           <View style={{height: 110, backgroundColor: darkTheme ? '#121212' : '#876163'}}>

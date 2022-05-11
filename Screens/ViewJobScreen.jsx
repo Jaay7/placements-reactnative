@@ -1,5 +1,5 @@
 import React from 'react'
-import { StatusBar, StyleSheet, View, Image, ScrollView } from 'react-native'
+import { StatusBar, StyleSheet, View, Image, ScrollView, Platform } from 'react-native'
 import { Text, AppBar, ActivityIndicator, HStack, VStack, Button, Chip, Divider, Surface, FAB } from '@react-native-material/core'
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useQuery, gql } from "@apollo/client";
@@ -45,7 +45,10 @@ const ViewJobScreen = ({navigation, route}) => {
     <View style={styles.container}>
     {
       loading ? <ActivityIndicator /> :
-      error ? <Text>Oops! Something went wrong.</Text> :
+      error ? 
+      <View style={{flex: 1}}>
+        <Text style={{marginTop: Platform.OS === 'ios' ? 60 : 10}}>Error! {error.message}</Text>
+      </View> :
       <>
         <StatusBar backgroundColor="#593739" barStyle='light-content' />
         <AppBar 

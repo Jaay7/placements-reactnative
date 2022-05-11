@@ -1,6 +1,6 @@
 import React from 'react'
 import { Text } from '@react-native-material/core'
-import { StatusBar, StyleSheet, View } from 'react-native'
+import { StatusBar, StyleSheet, View, Platform } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const MyJobs = () => {
@@ -20,7 +20,7 @@ const MyJobs = () => {
 
   return (
     <View style={darkTheme ? styles.darkContainer : styles.container}>
-      <Text color={darkTheme ? '#f2f2f2' : '#000'}>MyJobs</Text>
+      <Text color={darkTheme ? '#f2f2f2' : '#000'} style={{marginTop: Platform.OS === 'ios' ? 60 : 10}}>MyJobs</Text>
     </View>
   )
 }

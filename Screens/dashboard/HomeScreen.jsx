@@ -1,6 +1,6 @@
 import React from 'react'
 import { Text, ActivityIndicator, TextInput, Surface, HStack, VStack, Chip, Button } from '@react-native-material/core'
-import { View, StyleSheet, StatusBar, Image } from 'react-native';
+import { View, StyleSheet, StatusBar, Image, Platform } from 'react-native';
 import { useQuery, gql } from "@apollo/client";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -88,7 +88,9 @@ const HomeScreen = ({navigation}) => {
         <ActivityIndicator />
       ) :
       error ? (
-        <Text color={darkTheme ? '#f2f2f2' : '#000'}>Error! {error.message}</Text>
+        <View style={{flex: 1}}>
+          <Text color={darkTheme ? '#f2f2f2' : '#000'} style={{marginTop: Platform.OS === 'ios' ? 60 : 10}}>Error! {error.message}</Text>
+        </View>
       ) : (
         <View style={styles.box}>
           <Text variant="h6" color={darkTheme ? '#f2f2f2' : '#000'}>Welcome, {data.me.username}!</Text>
