@@ -41,6 +41,15 @@ const ViewJobScreen = ({navigation, route}) => {
   const { data, loading, error } = useQuery(get_job, {
     variables: { id: job }
   });
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <MaterialIcons name="bookmark-border" size={24} color="black" />
+      )
+    })
+  })
+
   return (
     <View style={styles.container}>
     {
@@ -51,7 +60,7 @@ const ViewJobScreen = ({navigation, route}) => {
       </View> :
       <>
         <StatusBar backgroundColor="#593739" barStyle='light-content' />
-        <AppBar 
+        {Platform.OS !== 'ios' && <AppBar 
           title={data.job.companyName}
           color='#593739'
           leading={
@@ -60,7 +69,7 @@ const ViewJobScreen = ({navigation, route}) => {
           trailing={
             <MaterialIcons name="bookmark-border" size={24} color="white" />
           }
-        />
+        />}
         <ScrollView>
           <Surface elevation={1} style={styles.card}>
             <HStack justify="space-between" items="center" ph={8}>
@@ -155,7 +164,7 @@ const styles = StyleSheet.create({
   },
   fab: {
     position: 'absolute',
-    margin: 16,
+    margin: Platform.OS === 'ios' ? 30 : 16,
     right: 0,
     bottom: 0,
     padding: 6,
