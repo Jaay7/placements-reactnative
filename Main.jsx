@@ -24,7 +24,7 @@ const Main = () => {
       }
     }
     checkLogin();
-  }, []);
+  });
 
   return (
     <NavigationContainer>
