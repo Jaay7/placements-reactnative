@@ -8,6 +8,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import ViewJobScreen from './Screens/ViewJobScreen';
 import SettingsScreen from './Screens/SettingsScreen';
 import { useQuery, gql } from '@apollo/client';
+import AppliedJobsScreen from './Screens/AppliedJobsScreen';
+import SavedJobsScreen from './Screens/SavedJobsScreen';
 
 const get_user_data = gql`
   query Me {
@@ -79,6 +81,20 @@ const Main = () => {
             <Stack.Screen
               name="Settings"
               component={SettingsScreen}
+              options={{
+                headerShown: Platform.OS === 'ios' ? true : false
+              }}
+            />
+            <Stack.Screen
+              name="Applied Jobs"
+              component={AppliedJobsScreen}
+              options={{
+                headerShown: Platform.OS === 'ios' ? true : false
+              }}
+            />
+            <Stack.Screen
+              name="Saved Jobs"
+              component={SavedJobsScreen}
               options={{
                 headerShown: Platform.OS === 'ios' ? true : false
               }}
