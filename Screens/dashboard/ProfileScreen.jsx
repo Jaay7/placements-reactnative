@@ -1,6 +1,6 @@
 import React from 'react'
 import { StatusBar, StyleSheet, View, ScrollView, Image } from 'react-native'
-import { Text, Button, ActivityIndicator, Surface, HStack, ListItem, Switch, Divider } from '@react-native-material/core'
+import { Text, Button, ActivityIndicator, Surface, HStack, ListItem, Switch, Divider, Pressable } from '@react-native-material/core'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useQuery, gql } from "@apollo/client";
 import { Ionicons, MaterialIcons, Feather } from '@expo/vector-icons';
@@ -83,25 +83,33 @@ const ProfileScreen = ({navigation}) => {
             <Text variant="body2" color="#b86f5f" style={{marginTop: 8}}>Full Name</Text>
             <Text color={darkTheme ? '#f2f2f2' : '#000'}>{data.me.fullName}</Text>
           </Surface>
-          <HStack justify="space-between" items="center" p={16}>
-            <Text color={darkTheme ? '#f2f2f2' : '#000'} variant="body1">Student Details</Text>
-            <Feather name="chevron-right" size={18} color={darkTheme ? '#ffcfbc' : '#593739'} />
-          </HStack>
+          <Pressable>
+            <HStack justify="space-between" items="center" p={16}>
+              <Text color={darkTheme ? '#f2f2f2' : '#000'} variant="body1">Student Details</Text>
+              <Feather name="chevron-right" size={18} color={darkTheme ? '#ffcfbc' : '#593739'} />
+            </HStack>
+          </Pressable>
           <Divider color={darkTheme ? '#323232' : '#e2e2e2'} style={{marginHorizontal: 16}} />
-          <HStack justify="space-between" items="center" p={16}>
-            <Text color={darkTheme ? '#f2f2f2' : '#000'} variant="body1">Applied Jobs</Text>
-            <Feather name="chevron-right" size={18} color={darkTheme ? '#ffcfbc' : '#593739'} />
-          </HStack>
+          <Pressable>
+            <HStack justify="space-between" items="center" p={16}>
+              <Text color={darkTheme ? '#f2f2f2' : '#000'} variant="body1">Applied Jobs</Text>
+              <Feather name="chevron-right" size={18} color={darkTheme ? '#ffcfbc' : '#593739'} />
+            </HStack>
+          </Pressable>
           <Divider color={darkTheme ? '#323232' : '#e2e2e2'} style={{marginHorizontal: 16}} />
-          <HStack justify="space-between" items="center" p={16}>
-            <Text color={darkTheme ? '#f2f2f2' : '#000'} variant="body1">Saved Jobs</Text>
-            <Feather name="chevron-right" size={18} color={darkTheme ? '#ffcfbc' : '#593739'} />
-          </HStack>
+          <Pressable>
+            <HStack justify="space-between" items="center" p={16}>
+              <Text color={darkTheme ? '#f2f2f2' : '#000'} variant="body1">Saved Jobs</Text>
+              <Feather name="chevron-right" size={18} color={darkTheme ? '#ffcfbc' : '#593739'} />
+            </HStack>
+          </Pressable>
           <Divider color={darkTheme ? '#323232' : '#e2e2e2'} style={{marginHorizontal: 16}} />
-          <HStack justify="space-between" items="center" p={16}>
-            <Text color={darkTheme ? '#f2f2f2' : '#000'} variant="body1">Settings</Text>
-            <Feather name="chevron-right" size={18} color={darkTheme ? '#ffcfbc' : '#593739'} />
-          </HStack>
+          <Pressable onPress={() => navigation.navigate('Settings')}>
+            <HStack justify="space-between" items="center" p={16}>
+              <Text color={darkTheme ? '#f2f2f2' : '#000'} variant="body1">Settings</Text>
+              <Feather name="chevron-right" size={18} color={darkTheme ? '#ffcfbc' : '#593739'} />
+            </HStack>
+          </Pressable>
         </ScrollView>
       )}
     </View>
