@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View, StatusBar } from 'react-native';
+import { StyleSheet, View, StatusBar, Platform } from 'react-native';
 import { Text, Button, Switch, ListItem, AppBar } from '@react-native-material/core';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -36,13 +36,13 @@ const SettingsScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor="#593739" barStyle='light-content' />
-      <AppBar 
+      {Platform.OS !== 'ios' && <AppBar 
         title="Settings"
         color='#593739'
         leading={
           <Ionicons name="arrow-back-outline" size={24} color="white" onPress={() => navigation.goBack()} />
         }
-      />
+      />}
       <ListItem
         title="Dark Theme"
         bottomDivider={false}
