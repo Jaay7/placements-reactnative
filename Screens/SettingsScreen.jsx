@@ -33,6 +33,17 @@ const SettingsScreen = ({navigation}) => {
     }
   }
 
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerStyle: {
+        backgroundColor: checked ? 'black' : 'white',
+      },
+      headerTitleStyle: {
+        color: checked ? 'white' : 'black',
+      }
+    });
+  })
+
   return (
     <View style={checked ? styles.darkContainer : styles.container}>
       <StatusBar backgroundColor="#593739" barStyle='light-content' />

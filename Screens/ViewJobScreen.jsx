@@ -64,8 +64,14 @@ const ViewJobScreen = ({navigation, route}) => {
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <MaterialIcons name="bookmark-border" size={24} color="black" />
-      )
+        <MaterialIcons name="bookmark-border" size={24} color={darkTheme ? "white" : "black"} />
+      ),
+      headerStyle: {
+        backgroundColor: darkTheme ? 'black' : 'white',
+      },
+      headerTitleStyle: {
+        color: darkTheme ? 'white' : 'black',
+      }
     })
   })
 
