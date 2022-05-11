@@ -1,13 +1,13 @@
 import React from 'react'
 import { Dimensions, Platform } from 'react-native'
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-import { AntDesign, MaterialIcons } from '@expo/vector-icons';
+import { AntDesign, Entypo } from '@expo/vector-icons';
 import HomeScreen from './HomeScreen';
-import MyJobs from './MyJobs';
 import ProfileScreen from './ProfileScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useIsFocused } from '@react-navigation/native';
+import NotificationScreen from './NotificationScreen';
 
 const Tab = createMaterialBottomTabNavigator();
 const IOSTab = createBottomTabNavigator();
@@ -56,13 +56,13 @@ const Dashboard = () => {
       }}
       />
       <IOSTab.Screen 
-        name="MyJobs" 
-        component={MyJobs} 
+        name="Notifications" 
+        component={NotificationScreen} 
         options={{
           headerShown: false,
-          tabBarLabel: 'Jobs',
+          tabBarLabel: 'Notifications',
           tabBarIcon: ({ color }) => (
-            <MaterialIcons name="work" color={color} size={22} />
+            <Entypo name="bell" color={color} size={22} />
           ),
         }}
       />
@@ -113,12 +113,12 @@ const Dashboard = () => {
         }}
       />
       <Tab.Screen 
-        name="MyJobs" 
-        component={MyJobs} 
+        name="Notifications" 
+        component={NotificationScreen} 
         options={{
-          tabBarLabel: 'Jobs',
+          tabBarLabel: 'Notifications',
           tabBarIcon: ({ color }) => (
-            <MaterialIcons name="work" color={color} size={22} />
+            <Entypo name="bell" color={color} size={22} />
           ),
         }}
       />
