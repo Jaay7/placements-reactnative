@@ -98,14 +98,14 @@ const ProfileScreen = ({navigation}) => {
             </HStack>
           </Pressable>
           <Divider color={darkTheme ? '#323232' : '#e2e2e2'} style={{marginHorizontal: 16}} />
-          <Pressable>
+          <Pressable onPress={() => navigation.navigate('Applied Jobs')}>
             <HStack justify="space-between" items="center" p={16}>
               <Text color={darkTheme ? '#f2f2f2' : '#000'} variant="body1">Applied Jobs</Text>
               <Feather name="chevron-right" size={18} color={darkTheme ? '#ffcfbc' : '#593739'} />
             </HStack>
           </Pressable>
           <Divider color={darkTheme ? '#323232' : '#e2e2e2'} style={{marginHorizontal: 16}} />
-          <Pressable>
+          <Pressable onPress={() => navigation.navigate('Saved Jobs')}>
             <HStack justify="space-between" items="center" p={16}>
               <Text color={darkTheme ? '#f2f2f2' : '#000'} variant="body1">Saved Jobs</Text>
               <Feather name="chevron-right" size={18} color={darkTheme ? '#ffcfbc' : '#593739'} />
