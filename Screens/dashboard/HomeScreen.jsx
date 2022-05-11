@@ -90,7 +90,7 @@ const HomeScreen = ({navigation}) => {
 
   return (
     <View style={darkTheme ? styles.darkContainer : styles.container}>
-      <StatusBar backgroundColor={darkTheme ? "#000" : "#fff"} barStyle='dark-content' />
+      <StatusBar backgroundColor={darkTheme ? "#000" : "#fff"} barStyle={darkTheme ? 'light-content' : 'dark-content'} />
       {loading ? (
         <ActivityIndicator />
       ) :
