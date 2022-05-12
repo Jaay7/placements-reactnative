@@ -81,7 +81,7 @@ const AppliedJobsScreen = ({navigation}) => {
       loading ? <ActivityIndicator /> :
       error ?
       <View style={{flex: 1}}>
-        <Text style={{marginTop: Platform.OS === 'ios' ? 60 : 10}}>Error! {error.message}</Text>
+        <Text color={darkTheme ? '#f2f2f2' : '#000'} style={{marginTop: 10, alignSelf: 'center'}}>Error! {error.message}</Text>
       </View> :
       <>
         <ScrollView style={{padding: 10, flex: 1}}>
@@ -115,7 +115,7 @@ const AppliedJobsScreen = ({navigation}) => {
             </HStack>
           </Surface>
         )) : 
-          <Text>You haven't applied for any jobs</Text>
+          <Text color={darkTheme ? '#f2f2f2' : '#000'} style={{alignSelf: 'center'}}>You haven't applied for any jobs</Text>
         }
         </ScrollView>
       </>

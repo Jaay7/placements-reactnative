@@ -197,7 +197,7 @@ const ViewJobScreen = ({navigation, route}) => {
       loading ? <ActivityIndicator /> :
       error ? 
       <View style={{flex: 1}}>
-        <Text style={{marginTop: Platform.OS === 'ios' ? 60 : 10}}>Error! {error.message}</Text>
+        <Text color={darkTheme ? '#f2f2f2' : '#000'} style={{marginTop: 10, alignSelf: 'center'}}>Error! {error.message}</Text>
       </View> :
       <>
         <StatusBar backgroundColor={darkTheme ? '#121212' : '#593739'} barStyle='light-content' />

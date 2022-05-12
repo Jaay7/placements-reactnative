@@ -108,7 +108,7 @@ const HomeScreen = ({navigation}) => {
       ) :
       error ? (
         <View style={{flex: 1}}>
-          <Text color={darkTheme ? '#f2f2f2' : '#000'} style={{marginTop: Platform.OS === 'ios' ? 60 : 10}}>Error! {error.message}</Text>
+          <Text color={darkTheme ? '#f2f2f2' : '#000'} style={{marginTop: Platform.OS === 'ios' ? 60 : 10, alignSelf: 'center'}}>Error! {error.message}</Text>
         </View>
       ) : (
         <View style={styles.box}>
@@ -153,7 +153,7 @@ const GetJobs = ({navigation, darkTheme, token}) => {
 
   return (
     loading ? <ActivityIndicator /> :
-    error ? <Text>Oops! Something went wrong.</Text> :
+    error ? <Text color={darkTheme ? '#f2f2f2' : '#000'} style={{alignSelf: 'center'}}>Oops! Something went wrong.</Text> :
     <ScrollView
       refreshControl={
         <RefreshControl
