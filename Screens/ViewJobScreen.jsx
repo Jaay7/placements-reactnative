@@ -1,5 +1,5 @@
 import React from 'react'
-import { StatusBar, StyleSheet, View, Image, ScrollView, Platform } from 'react-native'
+import { StatusBar, StyleSheet, View, Image, ScrollView, Platform, RefreshControl } from 'react-native'
 import { Text, AppBar, ActivityIndicator, HStack, VStack, Button, Chip, Divider, Surface, FAB } from '@react-native-material/core'
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useQuery, gql } from "@apollo/client";
@@ -95,7 +95,14 @@ const ViewJobScreen = ({navigation, route}) => {
             <MaterialIcons name="bookmark-border" size={24} color="white" />
           }
         />}
-        <ScrollView>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={loading}
+              onRefresh={data.refetch}
+            />
+          }
+        >
           <View elevation={1} style={styles.card}>
             <HStack justify="space-between" items="center" ph={8}>
               <VStack>

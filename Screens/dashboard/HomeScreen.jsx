@@ -1,6 +1,6 @@
 import React from 'react'
 import { Text, ActivityIndicator, TextInput, Surface, HStack, VStack, Chip, Button } from '@react-native-material/core'
-import { View, StyleSheet, StatusBar, Image, Platform } from 'react-native';
+import { View, StyleSheet, StatusBar, Image, Platform, ScrollView, RefreshControl } from 'react-native';
 import { useQuery, gql } from "@apollo/client";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -85,7 +85,7 @@ const HomeScreen = ({navigation}) => {
         authorization: 'JWT ' + token
       }
     },
-    pollInterval: 1000
+    pollInterval: 500
   });
 
   return (
@@ -131,7 +131,14 @@ const GetJobs = ({navigation, darkTheme}) => {
   return (
     loading ? <ActivityIndicator /> :
     error ? <Text>Oops! Something went wrong.</Text> :
-    <View>
+    <ScrollView
+      refreshControl={
+        <RefreshControl
+          refreshing={data.networkStatus === 4}
+          onRefresh={data.refetch} 
+        />
+      }
+    >
       {data.jobs.map(job => (
         <Surface elevation={1} style={styles.card} key={job.id}>
           <HStack justify="space-between" items="center" ph={8}>
@@ -170,7 +177,7 @@ const GetJobs = ({navigation, darkTheme}) => {
           </HStack>
         </Surface>
       ))}
-    </View>
+    </ScrollView>
   )
 }
 
