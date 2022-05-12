@@ -86,7 +86,7 @@ const AppliedJobsScreen = ({navigation}) => {
       <>
         <ScrollView style={{padding: 10, flex: 1}}>
         { data.userAppliedJobs.length > 0 ? data.userAppliedJobs.map(regJob => (
-          <Surface elevation={1} style={styles.card} key={regJob.id}>
+          <Surface style={styles.card} key={regJob.id}>
             <HStack justify="space-between" items="center" ph={8}>
               <VStack>
                 <Text variant="body1" color={darkTheme ? '#f2f2f2' : '#000'} style={styles.cpname}>{regJob.companyName}</Text>
@@ -147,6 +147,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#eea85230',
     borderRadius: 8,
     marginBottom: 10,
+    borderWidth: 1,
+    borderColor: '#eea85274'
   },
   cpname: {
     fontSize: 18,
