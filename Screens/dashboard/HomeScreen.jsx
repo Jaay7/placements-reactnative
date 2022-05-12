@@ -49,6 +49,18 @@ const get_all_jobs = gql`
   }
 `;
 
+const get_saved_jobs = gql`
+  query UserSavedJobs {
+    userSavedJobs {
+      id
+      jobTitle
+      companyName
+      companyLogo
+      jobLocation
+    }
+  }
+`;
+
 const HomeScreen = ({navigation}) => {
   const [search, setSearch] = React.useState('');
   const [token, setToken] = React.useState('');
@@ -116,7 +128,7 @@ const HomeScreen = ({navigation}) => {
               <MaterialIcons name="search" size={24} color="gray" />
             }
           />
-          <GetJobs navigation={navigation} darkTheme={darkTheme} />
+          <GetJobs navigation={navigation} darkTheme={darkTheme} token={token} />
         </View>
       )}
     </View>
@@ -125,8 +137,19 @@ const HomeScreen = ({navigation}) => {
 
 export default HomeScreen
 
-const GetJobs = ({navigation, darkTheme}) => {
-  const { data, loading, error } = useQuery(get_all_jobs);
+const GetJobs = ({navigation, darkTheme, token}) => {
+  const { data, loading, error } = useQuery(get_all_jobs, {
+    pollInterval: 1000,
+  });
+
+  const { data: savedJobsData, loading: loading2, error: error2 } = useQuery(get_saved_jobs, {
+    context: {
+      headers: {
+        authorization: 'JWT ' + token
+      },
+    },
+    pollInterval: 1000
+  })
 
   return (
     loading ? <ActivityIndicator /> :
@@ -140,7 +163,7 @@ const GetJobs = ({navigation, darkTheme}) => {
       }
     >
       {data.jobs.map(job => (
-        <Surface elevation={1} style={styles.card} key={job.id}>
+        <Surface style={styles.card} key={job.id}>
           <HStack justify="space-between" items="center" ph={8}>
             <VStack>
               <Text variant="body1" color={darkTheme ? '#f2f2f2' : '#000'} style={styles.cpname}>{job.companyName}</Text>
@@ -165,7 +188,13 @@ const GetJobs = ({navigation, darkTheme}) => {
             })}
           </HStack>
           <HStack justify="space-between" items="center" ph={8} style={{marginTop: 6}}>
-            <MaterialIcons name="bookmark-border" size={24} color={darkTheme ? '#f2f2f2' : '#000'} />
+            {
+              loading2 ? <ActivityIndicator /> :
+              error2 ? <Typography>Failed</Typography> :
+              savedJobsData.userSavedJobs.map(savedJob => savedJob.id).includes(job.id) ?
+              <MaterialIcons name="bookmark" size={24} color={darkTheme ? '#f2f2f2' : '#000'} /> :
+              <MaterialIcons name="bookmark-border" size={24} color={darkTheme ? '#f2f2f2' : '#000'} />
+            }
             <Button 
               title="View Job"
               uppercase={false}
@@ -213,6 +242,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#eea85230',
     borderRadius: 8,
     marginTop: 20,
+    borderWidth: 1,
+    borderColor: '#eea85274'
   },
   cpname: {
     fontSize: 18,
