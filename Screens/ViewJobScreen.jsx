@@ -1,8 +1,9 @@
 import React from 'react'
 import { StatusBar, StyleSheet, View, Image, ScrollView, Platform, RefreshControl } from 'react-native'
-import { Text, AppBar, ActivityIndicator, HStack, VStack, Button, Chip, Divider, Surface, FAB } from '@react-native-material/core'
+import { Text, AppBar, ActivityIndicator, HStack, VStack, Button, Chip, Divider } from '@react-native-material/core'
+import { Snackbar } from 'react-native-paper';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
-import { useQuery, gql } from "@apollo/client";
+import { useQuery, gql, useMutation } from "@apollo/client";
 import { useIsFocused } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -38,10 +39,49 @@ const get_job = gql`
   }
 `;
 
+const get_saved_jobs = gql`
+  query UserSavedJobs {
+    userSavedJobs {
+      id
+      jobTitle
+      companyName
+      companyLogo
+      jobLocation
+    }
+  }
+`;
+
+const apply_job = gql`
+  mutation ApplyJob($jobId: ID!) {
+    applyJob(jobId: $jobId) {
+      response
+    }
+  }
+`;
+
+const save_job = gql`
+  mutation SaveJob($jobId: ID!) {
+    saveJob(jobId: $jobId) {
+      response
+    }
+  }
+`;
+
+const remove_saved_job = gql`
+  mutation RemoveSavedJob($jobId: ID!) {
+    removeSavedJob(jobId: $jobId) {
+      response
+    }
+  }
+`;
+
 const ViewJobScreen = ({navigation, route}) => {
   const { job } = route.params;
   const [darkTheme, setDarkTheme] = React.useState(false);
+  const [token, setToken] = React.useState('');
   const isFocused = useIsFocused();
+  const [openSnackBar, setOpenSnackBar] = React.useState(false);
+  const [snackBarMessage, setSnackBarMessage] = React.useState('');
 
   React.useEffect(() => {
     const getTheme = async() => {
@@ -57,14 +97,90 @@ const ViewJobScreen = ({navigation, route}) => {
     }
   }, [darkTheme, isFocused]);
 
+  React.useEffect(() => {
+    const getToken = async () => {
+      const token = await AsyncStorage.getItem('token');
+      setToken(token);
+    }
+    if(isFocused) {
+      getToken();
+    }
+  }, [token, isFocused]);
+
   const { data, loading, error } = useQuery(get_job, {
     variables: { id: job }
   });
 
+  const { data: savedJobsData, loading: loading2, error: error2 } = useQuery(get_saved_jobs, {
+    context: {
+      headers: {
+        authorization: 'JWT ' + token
+      },
+    },
+    pollInterval: 1000
+  })
+
+  const [applyJob] = useMutation(apply_job, {
+    context: {
+      headers: {
+        authorization: 'JWT ' + token
+      }
+    },
+    variables: { jobId: job },
+    onCompleted: (data) => {
+      setOpenSnackBar(true);
+      setSnackBarMessage(data.applyJob.response);
+    },
+    onError: (error) => {
+      setOpenSnackBar(true);
+      setSnackBarMessage(error.message);
+    }
+  });
+
+  const [saveJob] = useMutation(save_job, {
+    context: {
+      headers: {
+        authorization: 'JWT ' + token
+      }
+    },
+    variables: { jobId: job },
+    onCompleted: (data) => {
+      setOpenSnackBar(true);
+      setSnackBarMessage(data.saveJob.response);
+    },
+    onError: (error) => {
+      setOpenSnackBar(true);
+      setSnackBarMessage(error.message);
+    }
+  })
+
+  const [removeSavedJob] = useMutation(remove_saved_job, {
+    context: {
+      headers: {
+        authorization: 'JWT ' + token
+      }
+    },
+    variables: { jobId: job },
+    onCompleted: (data) => {
+      setOpenSnackBar(true);
+      setSnackBarMessage(data.removeSavedJob.response);
+    },
+    onError: (error) => {
+      setOpenSnackBar(true);
+      setSnackBarMessage(error.message);
+    }
+  })
+
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <MaterialIcons name="bookmark-border" size={24} color={darkTheme ? "white" : "black"} />
+        loading2 ? <ActivityIndicator /> :
+        error2 ? <Text>Failed</Text> :
+        loading ? <ActivityIndicator /> :
+        error ? <Text>Failed</Text> :
+        savedJobsData.userSavedJobs.map(savedJob => savedJob.id).includes(data.job.id) ?
+        <MaterialIcons name="bookmark" size={24} onPress={() => removeSavedJob()} color={darkTheme ? '#f2f2f2' : '#000'} /> :
+        <MaterialIcons name="bookmark-border" onPress={() => saveJob()} size={24} color={darkTheme ? '#f2f2f2' : '#000'} />
       ),
       headerStyle: {
         backgroundColor: darkTheme ? 'black' : 'white',
@@ -92,7 +208,11 @@ const ViewJobScreen = ({navigation, route}) => {
             <Ionicons name="arrow-back-outline" size={24} color="white" onPress={() => navigation.goBack()} />
           }
           trailing={
-            <MaterialIcons name="bookmark-border" size={24} color="white" />
+            loading2 ? <ActivityIndicator /> :
+            error2 ? <Typography>Failed</Typography> :
+            savedJobsData.userSavedJobs.map(savedJob => savedJob.id).includes(data.job.id) ?
+            <MaterialIcons name="bookmark" onPress={() => removeSavedJob()} size={24} color="white" /> :
+            <MaterialIcons name="bookmark-border" onPress={() => saveJob()} size={24} color="white" />
           }
         />}
         <ScrollView
@@ -103,7 +223,7 @@ const ViewJobScreen = ({navigation, route}) => {
             />
           }
         >
-          <View elevation={1} style={styles.card}>
+          <View style={styles.card}>
             <HStack justify="space-between" items="center" ph={8}>
               <VStack>
                 <Text color={darkTheme ? '#f2f2f2' : '#000'} variant="body1" style={styles.jbtitle}>{data.job.jobTitle}</Text>
@@ -125,6 +245,16 @@ const ViewJobScreen = ({navigation, route}) => {
               />
               })}
             </HStack>
+            <Button 
+              title="Apply Job"
+              uppercase={false}
+              variant="contained"
+              color="#b86f5f"
+              tintColor='#fff'
+              style={{marginVertical: 10}}
+              leading={(props) => <Ionicons name="add" {...props} />}
+              onPress={() => applyJob()}
+            />
             <Divider style={{marginTop: 3, marginBottom: 2}} />
             <VStack>
               <Text color={darkTheme ? '#e2e2e2' : '#323232'} variant="body1" style={{marginTop: 10, fontWeight: 'bold'}}>Job Description</Text>
@@ -152,17 +282,20 @@ const ViewJobScreen = ({navigation, route}) => {
             </VStack>
           </View>
         </ScrollView>
-        <FAB
-          icon={props => <Ionicons {...props} name="add"/>}
-          label="Apply Job"
-          size='mini'
-          variant="extended"
-          color="#b86f5f"
-          tintColor='#fff'
-          style={styles.fab}
-        />
       </>
     }
+    <Snackbar 
+      visible={openSnackBar}
+      onDismiss={() => setOpenSnackBar(false)}
+      action={{
+        label: 'Dismiss',
+        onPress: () => setOpenSnackBar(false)
+      }}
+      style={styles.snackbar}
+      duration={3000}
+    >
+      {snackBarMessage}
+    </Snackbar>
     </View>
   )
 }
@@ -200,11 +333,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
-  fab: {
-    position: 'absolute',
-    margin: Platform.OS === 'ios' ? 30 : 16,
-    right: 0,
-    bottom: 0,
-    padding: 6,
+  snackbar: { 
+    position: "absolute", 
+    start: 16, 
+    end: 16,
+    bottom: 16 
   }
 })
