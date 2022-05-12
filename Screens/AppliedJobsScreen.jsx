@@ -111,6 +111,8 @@ const AppliedJobsScreen = ({navigation}) => {
                 uppercase={false}
                 color="#b86f5f"
                 tintColor='#fff'
+                // color={darkTheme ? "#ffcfbc40" : "#b86f5f"}
+                // tintColor={darkTheme ? "#ffcfbc" : '#fff'}
               />
             </HStack>
           </Surface>
@@ -150,11 +152,25 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#eea85274'
   },
+  darkCard: {
+    paddingHorizontal: 8,
+    paddingVertical: 16,
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    backgroundColor: '#232323',
+    borderRadius: 8,
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: '#404040'
+  },
   cpname: {
     fontSize: 18,
   },
   jbtitle: {
     fontSize: 16,
     fontWeight: 'bold',
+    marginTop: 6
   },
 })

@@ -46,10 +46,10 @@ const SettingsScreen = ({navigation}) => {
 
   return (
     <View style={checked ? styles.darkContainer : styles.container}>
-      <StatusBar backgroundColor="#593739" barStyle='light-content' />
+      <StatusBar backgroundColor={checked ? '#121212' : '#593739'} barStyle='light-content' />
       {Platform.OS !== 'ios' && <AppBar 
         title="Settings"
-        color='#593739'
+        color={checked ? '#121212' : '#593739'}
         leading={
           <Ionicons name="arrow-back-outline" size={24} color="white" onPress={() => navigation.goBack()} />
         }
@@ -66,8 +66,8 @@ const SettingsScreen = ({navigation}) => {
       <Text>{theme}</Text>
       <Button 
         title="Logout"
-        color="#b86f5f"
-        tintColor='#fff'
+        color={checked ? "#ffcfbc40" : "#b86f5f"}
+        tintColor={checked ? "#ffcfbc" : '#fff'}
         variant="contained"
         titleStyle={{fontSize: 16}}
         uppercase={false}

@@ -251,5 +251,6 @@ const styles = StyleSheet.create({
   jbtitle: {
     fontSize: 16,
     fontWeight: 'bold',
+    marginTop: 6
   },
 })

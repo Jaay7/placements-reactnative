@@ -65,7 +65,7 @@ const ProfileScreen = ({navigation}) => {
           <Text color={darkTheme ? '#f2f2f2' : '#000'} style={{marginTop: Platform.OS === 'ios' ? 60 : 10}}>Error! {error.message}</Text>
         </View>
       ) : (
-        <ScrollView style={{flex: 1}}>
+        <ScrollView style={{flex: 1, marginTop: Platform.OS === 'ios' ? 50 : 0, backgroundColor: darkTheme ? '#000' : '#fff' }}>
           <View style={{height: 110, backgroundColor: darkTheme ? '#121212' : '#876163'}}>
             <Text variant="body1" color="white" style={{ fontSize: 18, fontWeight: 'bold', paddingVertical: 8, alignSelf: 'center'}}>Profile</Text>
             <Image
@@ -129,12 +129,12 @@ export default ProfileScreen
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#876163',
     marginTop: StatusBar.currentHeight
   },
   darkContainer: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: '#121212',
     marginTop: StatusBar.currentHeight
   },
   card: {
