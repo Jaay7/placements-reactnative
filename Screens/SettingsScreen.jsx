@@ -60,7 +60,7 @@ const SettingsScreen = ({navigation}) => {
           value={checked}
           onValueChange={toggleSwitch}
           thumbColor={checked ? '#ed9e8c' : '#e2e2e2'}
-          trackColor={{ false: '#c2c2c2', true: '#ffcfbc' }}
+          trackColor={{ false: '#c2c2c2', true: '#ffcfbc70' }}
         />
       </HStack>
       <Text>{theme}</Text>
