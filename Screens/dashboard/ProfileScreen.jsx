@@ -66,7 +66,7 @@ const ProfileScreen = ({navigation}) => {
         </View>
       ) : (
         <ScrollView style={{flex: 1, marginTop: Platform.OS === 'ios' ? 50 : 0, backgroundColor: darkTheme ? '#000' : '#fff' }}>
-          <View style={{height: 110, backgroundColor: darkTheme ? '#121212' : '#876163'}}>
+          <View style={{height: 110, backgroundColor: darkTheme ? '#121212' : '#876163', elevation: 4, shadowRadius: 8, shadowOpacity: 0.7}}>
             <Text variant="body1" color="white" style={{ fontSize: 18, fontWeight: 'bold', paddingVertical: 8, alignSelf: 'center'}}>Profile</Text>
             <Image
               source={{uri: 'https://picsum.photos/200'}}
