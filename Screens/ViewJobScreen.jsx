@@ -51,6 +51,18 @@ const get_saved_jobs = gql`
   }
 `;
 
+const get_applied_jobs = gql`
+  query UserAppliedJobs {
+    userAppliedJobs {
+      id
+      jobTitle
+      companyName
+      companyLogo
+      jobLocation
+    }
+  }
+`;
+
 const apply_job = gql`
   mutation ApplyJob($jobId: ID!) {
     applyJob(jobId: $jobId) {
@@ -118,6 +130,15 @@ const ViewJobScreen = ({navigation, route}) => {
       },
     },
     pollInterval: 1000
+  })
+
+  const { data: appliedJobsData, loading: loading3, error: error3 } = useQuery(get_applied_jobs, {
+    context: {
+      headers: {
+        authorization: 'JWT ' + token
+      },
+    },
+    pollInterval: 500
   })
 
   const [applyJob] = useMutation(apply_job, {
@@ -245,7 +266,12 @@ const ViewJobScreen = ({navigation, route}) => {
               />
               })}
             </HStack>
-            <Button 
+            {
+              loading3 ? <ActivityIndicator /> :
+              error3 ? <Text>Failed</Text> :
+              appliedJobsData.userAppliedJobs.map(appliedJob => appliedJob.id).includes(data.job.id) ?
+              <Text variant="body2" color={darkTheme ? '#f2f2f2' : '#000'} style={{alignSelf: 'center', marginVertical: 5}}>You have Applied for this Job. <Text onPress={() => navigation.navigate('Applied Jobs')} color={darkTheme ? '#ffcfbc' : '#b86f5f'}>View all</Text></Text> :
+              <Button 
               title="Apply Job"
               uppercase={false}
               variant="contained"
@@ -254,7 +280,7 @@ const ViewJobScreen = ({navigation, route}) => {
               style={{marginVertical: 10}}
               leading={(props) => <Ionicons name="add" {...props} />}
               onPress={() => applyJob()}
-            />
+            />}
             <Divider style={{marginTop: 3, marginBottom: 2}} />
             <VStack>
               <Text color={darkTheme ? '#e2e2e2' : '#323232'} variant="body1" style={{marginTop: 10, fontWeight: 'bold'}}>Job Description</Text>
