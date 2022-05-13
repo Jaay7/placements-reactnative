@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "placements-reactnative",
-    "slug": "placements-reactnative",
+    "name": "placements-app",
+    "slug": "placements-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -27,6 +27,8 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "description": "",
+    "githubUrl": "https://github.com/Jaay7/placements-reactnative"
   }
 }
